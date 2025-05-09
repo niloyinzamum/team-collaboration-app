@@ -56,7 +56,7 @@ export function LoginForm() {
           type="email"
           autoComplete="email"
           required
-          className="bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full appearance-none leading-normal"
+          className="text-indigo-700 bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full appearance-none leading-normal"
           placeholder="Enter your email"
         />
       </div>
@@ -71,7 +71,7 @@ export function LoginForm() {
           type="password"
           autoComplete="current-password"
           required
-          className="bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full appearance-none leading-normal"
+          className="text-indigo-700 bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full appearance-none leading-normal"
           placeholder="Enter your password"
         />
       </div>
@@ -79,7 +79,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="bg-gradient-to-r from-purple-400 to-indigo-500 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-4"
+        className="bg-gradient-to-r from-purple-400 to-indigo-500 text-black font-semibold py-2 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out mt-4"
       >
         {isLoading ? "Signing in..." : "Sign in"}
       </button>
