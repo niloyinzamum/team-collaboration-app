@@ -38,6 +38,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    //added
+    
+
     // Generate JWT token
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
