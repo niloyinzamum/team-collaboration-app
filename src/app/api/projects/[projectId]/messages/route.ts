@@ -1,14 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth2";
 import { db } from "@/lib/db";
 import { pusherServer } from "@/lib/pusher";
 
 export async function POST(
-  req: NextRequest,
-  { params }: { params: { projectId: string } }
+  req : Request, context: { params: { projectId: string } }
 ) {
   try {
-    const projectId = await params.projectId;
+     const  { projectId } = context.params
+    // const projectId = await params.projectId;
     const user = await getCurrentUser();
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -63,10 +63,10 @@ export async function POST(
 }
 
 export async function GET(
-  req: NextRequest,
-  context: { params: { projectId: string } }
+  req : Request, context: { params: { projectId: string } }
 ) {
   try {
+     const  { projectId } = context.params
     const user = await getCurrentUser();
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -74,7 +74,7 @@ export async function GET(
 
     // Get project manager
     const project = await db.project.findUnique({
-      where: { id: context.params.projectId },
+      where: { id: projectId },
       select: { managerId: true }
     });
 
