@@ -11,5 +11,6 @@ const nextConfig = {
   },
   // Your other Next.js config options...
 }
+//change
 
 module.exports = nextConfig
