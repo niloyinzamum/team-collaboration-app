@@ -1,14 +1,14 @@
-import {  NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth2";
 import { db } from "@/lib/db";
 import { pusherServer } from "@/lib/pusher";
 
-export async function POST(
-  req : Request, context: { params: { projectId: string } }
-) {
+export async function POST(req: Request) {
   try {
-     const  { projectId } = context.params
-    // const projectId = await params.projectId;
+    // Get projectId from URL segments
+    const segments = new URL(req.url).pathname.split('/');
+    const projectId = segments[3]; // ['', 'api', 'projects', 'projectId', 'messages']
+
     const user = await getCurrentUser();
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -62,11 +62,12 @@ export async function POST(
   }
 }
 
-export async function GET(
-  req : Request, context: { params: { projectId: string } }
-) {
+export async function GET(req: Request) {
   try {
-     const  { projectId } = context.params
+    // Get projectId from URL segments
+    const segments = new URL(req.url).pathname.split('/');
+    const projectId = segments[3];
+
     const user = await getCurrentUser();
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });

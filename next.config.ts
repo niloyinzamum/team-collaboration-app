@@ -7,7 +7,7 @@ const nextConfig = {
   },
   // Also disable ESLint checking during build if needed
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   // Your other Next.js config options...
 }

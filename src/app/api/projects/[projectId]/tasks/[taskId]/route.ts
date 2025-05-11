@@ -1,12 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth2";
 import { db } from "@/lib/db";
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { projectId: string; taskId: string } }
-) {
+export async function PATCH(req: Request) {
   try {
+    const segments = new URL(req.url).pathname.split('/');
+    const projectId = segments[3]; // ['', 'api', 'projects', 'projectId', 'tasks', 'taskId']
+    const taskId = segments[5];
+
     const user = await getCurrentUser();
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -15,8 +16,8 @@ export async function PATCH(
     const body = await req.json();
     const task = await db.task.update({
       where: {
-        id: params.taskId,
-        projectId: params.projectId
+        id: taskId,
+        projectId: projectId
       },
       data: {
         title: body.title,
@@ -43,11 +44,12 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { projectId: string; taskId: string } }
-) {
+export async function DELETE(req: Request) {
   try {
+    const segments = new URL(req.url).pathname.split('/');
+    const projectId = segments[3];
+    const taskId = segments[5];
+
     const user = await getCurrentUser();
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -55,8 +57,8 @@ export async function DELETE(
 
     await db.task.delete({
       where: {
-        id: params.taskId,
-        projectId: params.projectId
+        id: taskId,
+        projectId: projectId
       }
     });
 

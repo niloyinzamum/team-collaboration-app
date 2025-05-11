@@ -1,13 +1,12 @@
-import { NextRequest, NextResponse } from "next/server"
+import {  NextResponse } from "next/server"
 import { ProjectService } from "@/lib/services/project.service"
 import { getCurrentUser } from "@/lib/auth2"
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { projectId: string } }
-) {
+export async function GET(req: Request) {
   try {
-    const projectId = context.params.projectId
+    const segments = new URL(req.url).pathname.split('/')
+    const projectId = segments[3] // ['', 'api', 'projects', 'projectId']
+
     const user = await getCurrentUser()
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 })
@@ -25,18 +24,18 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  req: NextRequest,
-  context: { params: { projectId: string } }
-) {
+export async function PATCH(req: Request) {
   try {
+    const segments = new URL(req.url).pathname.split('/')
+    const projectId = segments[3]
+
     const user = await getCurrentUser()
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
     const body = await req.json()
-    const project = await ProjectService.update(context.params.projectId, body)
+    const project = await ProjectService.update(projectId, body)
     
     return NextResponse.json(project)
   } catch (error) {
@@ -45,17 +44,17 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  context: { params: { projectId: string } }
-) {
+export async function DELETE(req: Request) {
   try {
+    const segments = new URL(req.url).pathname.split('/')
+    const projectId = segments[3]
+
     const user = await getCurrentUser()
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    await ProjectService.delete(context.params.projectId)
+    await ProjectService.delete(projectId)
     
     return new NextResponse(null, { status: 204 })
   } catch (error) {

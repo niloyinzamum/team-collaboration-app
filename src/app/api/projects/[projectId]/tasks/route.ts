@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth2";
 import { db } from "@/lib/db";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { projectId: string } }
-) {
+export async function GET(req: Request) {
   try {
+    const segments = new URL(req.url).pathname.split('/');
+    const projectId = segments[3]; // ['', 'api', 'projects', 'projectId', 'tasks']
+
     const user = await getCurrentUser();
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -14,7 +14,7 @@ export async function GET(
 
     const tasks = await db.task.findMany({
       where: {
-        projectId: params.projectId
+        projectId: projectId
       },
       include: {
         assignedTo: {
@@ -35,11 +35,11 @@ export async function GET(
   }
 }
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { projectId: string } }
-) {
+export async function POST(req: Request) {
   try {
+    const segments = new URL(req.url).pathname.split('/');
+    const projectId = segments[3];
+
     const user = await getCurrentUser();
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -67,7 +67,7 @@ export async function POST(
         title: body.title,
         description: body.description,
         status: body.status,
-        projectId: params.projectId,
+        projectId: projectId,
         ...(body.assignedToId ? { assignedToId: body.assignedToId } : {})
       },
       include: {

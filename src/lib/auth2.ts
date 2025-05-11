@@ -6,6 +6,7 @@ export async function getCurrentUser() {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('authToken')?.value;
+    console.log('Token:', token);
     
     if (!token) {
       return null;
@@ -15,9 +16,9 @@ export async function getCurrentUser() {
     
     try {
       const { payload } = await jwtVerify(token, secret);
-
+      console.log('Payload:', payload);
       const user = await db.user.findUnique({
-        where: { id: payload.userId as string },
+        where: { id: payload.id as string },
         select: {
           id: true,
           name: true,
