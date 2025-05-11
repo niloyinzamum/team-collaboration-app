@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -10,33 +9,46 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsLoading(true);
-    setError(null);
+// ...existing code...
 
-    const formData = new FormData(event.currentTarget);
+async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  setIsLoading(true);
+  setError(null);
 
-    try {
-      const response = await signIn("credentials", {
-        email: formData.get("email") as string,
-        password: formData.get("password") as string,
-        redirect: false,
-      });
+  const formData = new FormData(event.currentTarget);
 
-      if (response?.error) {
-        setError("Invalid credentials");
-        return;
-      }
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: formData.get("email"),
+        password: formData.get("password"),
+      }),
+    });
 
-      router.push("/dashboard");
-      router.refresh();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.error || 'Something went wrong');
+      return;
     }
+
+    // Successful login
+    router.push("/");
+    router.refresh();
+  } catch (error) {
+    console.error(error);
+    setError('An error occurred during login');
+  } finally {
+    setIsLoading(false);
   }
+}
+
+// ...existing code...
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">

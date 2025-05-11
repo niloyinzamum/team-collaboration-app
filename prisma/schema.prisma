@@ -24,6 +24,9 @@ model User {
   projects         Project[]  @relation("ProjectMembers")
   managedProjects  Project[]  @relation("ProjectManager")
   files            File[]
+
+  // Tasks assigned to the user
+  assignedTasks    Task[]    @relation("UserAssignedTasks")
   
   // Sessions and accounts for authentication
   accounts        Account[]
@@ -73,6 +76,7 @@ model Project {
   
   // Other relations
   files       File[]
+  tasks       Task[]    @relation("ProjectTasks")
 }
 
 model Message {
@@ -117,4 +121,20 @@ enum Role {
   ADMIN
   MANAGER
   MEMBER
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  status      String   @default("TODO")
+  createdAt   DateTime @default(now())
+  assignedTo   User?    @relation("UserAssignedTasks", fields: [assignedToId], references: [id])
+  project      Project  @relation("ProjectTasks", fields: [projectId], references: [id], onDelete: Cascade)
+  projectId    String
+  // Removed duplicate definition of assignedTo
+  assignedToId String?
+
+  @@index([projectId])
+  @@index([assignedToId])
 }

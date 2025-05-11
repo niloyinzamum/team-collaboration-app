@@ -21,3 +21,7 @@ export interface Project {
     uploadedBy: string;
     date: string;
   }
+
+  export * from './user'
+export * from './project'
+export * from './file'

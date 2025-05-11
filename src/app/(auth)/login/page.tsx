@@ -14,7 +14,7 @@ export default function LoginPage() {
         <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-2">
           Welcome Back
         </h1>
-        <p className="text-center text-gray-700 mb-8">
+        <p className="text-center text-black-700 mb-8">
           Sign in to your account
         </p>
         <LoginForm />

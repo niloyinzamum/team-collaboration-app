@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { DashboardHeader } from "./Header";
+import { ProjectModal } from "../modals/ProjectModal";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -13,8 +14,8 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children, activeTab, onTabChange }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
-  // Sidebar width: 256px (w-64) expanded, 80px (w-20) collapsed
   const marginLeft = sidebarOpen ? (collapsed ? "ml-20" : "ml-64") : "ml-0";
 
   return (
@@ -25,6 +26,7 @@ export function DashboardLayout({ children, activeTab, onTabChange }: DashboardL
         onTabChange={onTabChange}
         collapsed={collapsed}
         setCollapsed={setCollapsed}
+        onNewProject={() => setIsProjectModalOpen(true)}
       />
       <div className={`${marginLeft} transition-all duration-300`}>
         <DashboardHeader onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
@@ -34,6 +36,11 @@ export function DashboardLayout({ children, activeTab, onTabChange }: DashboardL
           </div>
         </div>
       </div>
+
+      <ProjectModal 
+        isOpen={isProjectModalOpen} 
+        onClose={() => setIsProjectModalOpen(false)} 
+      />
     </div>
   );
 }
